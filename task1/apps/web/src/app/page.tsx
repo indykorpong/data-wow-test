@@ -1,69 +1,151 @@
-import Image from "next/image";
+"use client";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { getHello } from "@/lib/api";
+
+const features = [
+  {
+    title: "Fast by default",
+    description:
+      "Server-rendered pages and streaming responses keep the first paint quick, even on slow connections.",
+  },
+  {
+    title: "Built to scale",
+    description:
+      "A typed API layer and a component library that stay predictable as the product grows.",
+  },
+  {
+    title: "Simple to run",
+    description:
+      "One command to develop, one to build, and sensible defaults everywhere in between.",
+  },
+];
 
 export default function Home() {
+  const [hello, setHello] = useState(null);
+  useEffect(() => {
+    getHello().then((res) => setHello(res))
+  }, []);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
+    <>
+      <header className="w-full border-b border-black/[.08] dark:border-white/[.12]">
+        <nav className="mx-auto flex h-16 w-full max-w-5xl items-center justify-between px-6">
+          <Link href="/" className="text-base font-semibold tracking-tight">
+            Northbound
+          </Link>
+          <div className="flex items-center gap-6 text-sm">
             <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              href="#features"
+              className="hidden text-zinc-600 transition-colors hover:text-foreground sm:block dark:text-zinc-400"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
+              Features
+            </a>
             <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              href="#contact"
+              className="rounded-full bg-foreground px-4 py-2 font-medium text-background transition-opacity hover:opacity-90"
             >
-              Learning
-            </a>{" "}
-            center.
+              Get started
+            </a>
+          </div>
+        </nav>
+      </header>
+
+      <main className="flex-1">
+        <section className="mx-auto w-full max-w-5xl px-6 py-24 sm:py-32">
+          <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
+            Now in early access
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+          <h1 className="mt-4 max-w-2xl text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
+            Ship your product without the busywork.
+          </h1>
+          <p className="mt-6 max-w-xl text-lg leading-8 text-zinc-600 dark:text-zinc-400">
+            Northbound gives your team a single place to plan, build, and
+            release — so you spend your time on the work that actually moves the
+            product forward. {hello}
+          </p>
+          <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+            <a
+              href="#contact"
+              className="flex h-12 items-center justify-center rounded-full bg-foreground px-6 text-base font-medium text-background transition-opacity hover:opacity-90"
+            >
+              Get started free
+            </a>
+            <a
+              href="#features"
+              className="flex h-12 items-center justify-center rounded-full border border-black/[.08] px-6 text-base font-medium transition-colors hover:bg-black/[.04] dark:border-white/[.14] dark:hover:bg-white/[.06]"
+            >
+              See how it works
+            </a>
+          </div>
+        </section>
+
+        <section
+          id="features"
+          className="border-t border-black/[.08] dark:border-white/[.12]"
+        >
+          <div className="mx-auto grid w-full max-w-5xl gap-10 px-6 py-20 sm:grid-cols-3">
+            {features.map((feature) => (
+              <div key={feature.title}>
+                <h2 className="text-base font-semibold tracking-tight">
+                  {feature.title}
+                </h2>
+                <p className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+                  {feature.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section
+          id="contact"
+          className="border-t border-black/[.08] dark:border-white/[.12]"
+        >
+          <div className="mx-auto w-full max-w-5xl px-6 py-20">
+            <h2 className="text-2xl font-semibold tracking-tight">
+              Want early access?
+            </h2>
+            <p className="mt-3 max-w-lg text-zinc-600 dark:text-zinc-400">
+              Leave your email and we&apos;ll be in touch when your workspace is
+              ready.
+            </p>
+            <form className="mt-8 flex w-full max-w-md flex-col gap-3 sm:flex-row">
+              <label htmlFor="email" className="sr-only">
+                Email address
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                required
+                placeholder="you@company.com"
+                className="h-12 flex-1 rounded-full border border-black/[.12] bg-transparent px-5 text-base outline-none placeholder:text-zinc-400 focus:border-foreground dark:border-white/[.18]"
+              />
+              <button
+                type="submit"
+                className="h-12 rounded-full bg-foreground px-6 text-base font-medium text-background transition-opacity hover:opacity-90"
+              >
+                Request access
+              </button>
+            </form>
+          </div>
+        </section>
       </main>
-    </div>
+
+      <footer className="border-t border-black/[.08] dark:border-white/[.12]">
+        <div className="mx-auto flex w-full max-w-5xl flex-col gap-2 px-6 py-8 text-sm text-zinc-500 sm:flex-row sm:items-center sm:justify-between dark:text-zinc-400">
+          <p>© 2026 Northbound. All rights reserved.</p>
+          <div className="flex gap-6">
+            <a href="#" className="transition-colors hover:text-foreground">
+              Privacy
+            </a>
+            <a href="#" className="transition-colors hover:text-foreground">
+              Terms
+            </a>
+          </div>
+        </div>
+      </footer>
+    </>
   );
 }
