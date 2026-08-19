@@ -1,0 +1,54 @@
+/* Shared chrome for the Log in and Sign Up forms. */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 2.375rem; /* Figma: 60px title block -> 35px gap -> fields */
+}
+
+.heading {
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+  text-align: center;
+  color: var(--text-primary);
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 2.25rem; /* Figma: 136px pitch between 100px field groups */
+}
+
+.footnote {
+  font-size: var(--fs-lg);
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.link {
+  color: var(--c-primary-600);
+  font-weight: var(--fw-semibold);
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 1023px) {
+  .form {
+    gap: 1.75rem;
+  }
+
+  .heading {
+    font-size: var(--fs-h4);
+  }
+
+  .fields {
+    gap: 1.5rem;
+  }
+
+  .footnote {
+    font-size: var(--fs-sm);
+  }
+}

@@ -1,3 +1,10 @@
 packages:
   - "apps/*"
   - "packages/*"
+
+# Carried over from the web app's own workspace file (deleted — a nested
+# pnpm-workspace.yaml inside a workspace package confuses pnpm about the root).
+# Without this, `pnpm install` warns about ignored build scripts.
+ignoredBuiltDependencies:
+  - sharp
+  - unrs-resolver

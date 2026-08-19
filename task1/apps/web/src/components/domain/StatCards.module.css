@@ -1,0 +1,102 @@
+/* Stat cards — Figma "Frame 16": three 350×234 cards, 40px icon, 24px label,
+   ~64px value, 35px gutter across a 1120px row. */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2.1875rem;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 234px;
+  padding: 1.5rem;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+}
+
+.label {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-medium);
+  color: var(--text-secondary);
+}
+
+.value {
+  font-size: var(--fs-display);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+  color: var(--text-primary);
+  /* Tabular figures stop the number jittering as the count changes. */
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Per-card accents ------------------------------------------------------ */
+
+.seats .icon {
+  color: var(--c-primary-600);
+}
+
+.reserved .icon {
+  color: var(--c-success-600);
+}
+
+.cancelled .icon {
+  color: var(--c-danger-600);
+}
+
+/* --- Responsive ------------------------------------------------------------ */
+
+/* Tablet: keep all three across but let them shrink, and pull the oversized
+   desktop numerals back so they still fit the card. */
+@media (max-width: 1023px) {
+  .grid {
+    gap: 1rem;
+  }
+
+  .card {
+    min-height: 180px;
+    padding: 1rem;
+  }
+
+  .label {
+    font-size: var(--fs-sm);
+  }
+
+  .value {
+    font-size: var(--fs-h2);
+  }
+}
+
+/* Phone: stack, and lay each card out as a row so three tall cards do not push
+   the concert list off the first screen. */
+@media (max-width: 639px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.75rem;
+  }
+
+  .card {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+    min-height: 0;
+    text-align: left;
+  }
+
+  .text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .value {
+    font-size: var(--fs-h4);
+  }
+}

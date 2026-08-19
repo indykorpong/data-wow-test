@@ -1,0 +1,104 @@
+/* Sidebar — Figma "Frame 23": 240px column, 108px header, 84px nav rows,
+   logout pinned to the bottom. */
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  width: var(--sidebar-w);
+  height: 100%;
+  background-color: var(--bg-sidebar);
+  color: var(--text-inverse);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-height: 108px;
+  padding-inline: 1.5rem;
+}
+
+.title {
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-bold);
+  line-height: 1;
+}
+
+/* Drawer close button — only rendered below the desktop breakpoint. */
+.close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: var(--text-inverse);
+  border-radius: var(--radius-md);
+}
+
+.close:hover {
+  background-color: rgb(255 255 255 / 0.1);
+}
+
+@media (min-width: 1024px) {
+  .close {
+    display: none;
+  }
+}
+
+.nav {
+  flex: 1 1 auto;
+  overflow-y: auto;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  min-height: 84px;
+  padding-inline: 1.5rem;
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-medium);
+  color: rgb(255 255 255 / 0.72);
+  text-align: left;
+  transition:
+    background-color 160ms var(--ease-out),
+    color 160ms var(--ease-out);
+}
+
+.item:hover {
+  color: var(--text-inverse);
+  background-color: rgb(255 255 255 / 0.08);
+}
+
+.item.active {
+  color: var(--text-inverse);
+  background-color: var(--c-primary-600);
+  font-weight: var(--fw-semibold);
+}
+
+.item :global(svg) {
+  flex-shrink: 0;
+}
+
+.footer {
+  border-top: 1px solid rgb(255 255 255 / 0.12);
+}
+
+/* The 84px rows and 40px heading are sized for a 1024px-tall desktop frame; a
+   phone drawer needs to fit more of the nav on screen at once. */
+@media (max-width: 1023px) {
+  .header {
+    min-height: 72px;
+  }
+
+  .title {
+    font-size: var(--fs-h4);
+  }
+
+  .item {
+    min-height: 64px;
+    font-size: var(--fs-md);
+  }
+}

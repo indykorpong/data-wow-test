@@ -1,0 +1,130 @@
+/* History — Figma "Table 1": 1120px wide, a 50px header row and 44px body rows.
+   Renders as a real <table> on desktop and as stacked cards on a phone, from
+   the same markup. */
+
+.panel {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+/* Tablet keeps the table but lets it scroll rather than crushing the columns. */
+.scroll {
+  overflow-x: auto;
+}
+
+.table {
+  min-width: 640px;
+}
+
+.th {
+  padding: 0.875rem 1.5rem;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  background-color: var(--c-gray-50);
+  border-bottom: 1px solid var(--border-subtle);
+  white-space: nowrap;
+}
+
+.td {
+  padding: 0.75rem 1.5rem;
+  font-size: var(--fs-sm);
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-subtle);
+  vertical-align: middle;
+}
+
+.row:last-child .td {
+  border-bottom: 0;
+}
+
+.time {
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Action pill. */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.625rem;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  border-radius: var(--radius-full);
+  text-transform: capitalize;
+}
+
+.badge.reserve {
+  color: var(--c-success-600);
+  background-color: var(--c-success-50);
+}
+
+.badge.cancel {
+  color: var(--c-danger-600);
+  background-color: var(--c-danger-50);
+}
+
+.empty {
+  padding: 3rem 1.5rem;
+  text-align: center;
+  font-size: var(--fs-sm);
+  color: var(--text-secondary);
+}
+
+/* --- Phone: table semantics, card layout ----------------------------------
+   The header row is hidden and each cell carries its own label via a data
+   attribute, so the markup stays a valid table for assistive tech while the
+   visual layout stops being a grid. */
+@media (max-width: 639px) {
+  .scroll {
+    overflow-x: visible;
+  }
+
+  .table {
+    min-width: 0;
+  }
+
+  .thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .row {
+    display: block;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .row:last-child {
+    border-bottom: 0;
+  }
+
+  .td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.25rem 0;
+    border-bottom: 0;
+  }
+
+  .td::before {
+    content: attr(data-label);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-secondary);
+  }
+}

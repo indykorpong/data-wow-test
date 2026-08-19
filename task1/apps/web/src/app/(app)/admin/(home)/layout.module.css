@@ -1,0 +1,9 @@
+/* Admin Home shell — stat cards and the Overview/Create tabs are shared by both
+   home views. History deliberately sits outside this layout: its Figma frame
+   has neither. */
+
+.home {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 3vw, 3rem);
+}

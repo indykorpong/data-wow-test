@@ -1,0 +1,79 @@
+/* Create form — Figma "Frame 12": heading, rule, a two-up row of 508px fields,
+   a full-width description, and a right-aligned Save. */
+
+.panel {
+  padding: 2rem;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.heading {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+}
+
+.rule {
+  height: 1px;
+  margin: 1.5rem 0;
+  border: 0;
+  background-color: var(--border-subtle);
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 2.25rem;
+}
+
+/* Concert Name and Total of seat share one row at the design width. */
+.row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2.25rem;
+}
+
+/* --- Responsive ------------------------------------------------------------ */
+
+@media (max-width: 1023px) {
+  .panel {
+    padding: 1.5rem;
+  }
+
+  .heading {
+    font-size: var(--fs-h4);
+  }
+
+  .fields {
+    gap: 1.5rem;
+  }
+}
+
+/* Two 508px fields cannot share a phone row legibly — stack them, and let Save
+   span the width. */
+@media (max-width: 639px) {
+  .panel {
+    padding: 1.25rem;
+  }
+
+  .heading {
+    font-size: var(--fs-md);
+  }
+
+  .row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.25rem;
+  }
+
+  .actions > * {
+    width: 100%;
+  }
+}

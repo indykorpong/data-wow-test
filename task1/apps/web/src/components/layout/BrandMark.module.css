@@ -1,0 +1,71 @@
+/* Brand lockup — Figma: 48px ellipse + "BRAND" (auth), 24px + "BRAND" (top bar). */
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+}
+
+.dot {
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+  background-color: var(--c-primary-600);
+}
+
+.word {
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+/* --- Sizes ---------------------------------------------------------------- */
+
+.lg {
+  gap: 0.75rem;
+}
+
+.lg .dot {
+  width: 48px;
+  height: 48px;
+}
+
+.lg .word {
+  font-size: var(--fs-h2);
+}
+
+.sm {
+  gap: 0.75rem;
+}
+
+.sm .dot {
+  width: 24px;
+  height: 24px;
+}
+
+.sm .word {
+  font-size: var(--fs-lg);
+}
+
+@media (max-width: 639px) {
+  .lg .dot {
+    width: 36px;
+    height: 36px;
+  }
+
+  .lg .word {
+    font-size: var(--fs-h4);
+  }
+}
+
+/* --- Tones ---------------------------------------------------------------- */
+
+.dark .word {
+  color: var(--text-primary);
+}
+
+.light .word {
+  color: var(--text-inverse);
+}
+
+.light .dot {
+  background-color: var(--c-primary-500);
+}

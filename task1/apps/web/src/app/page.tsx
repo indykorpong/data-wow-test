@@ -1,151 +1,76 @@
 "use client";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { getHello } from "@/lib/api";
 
-const features = [
+import { useRouter } from "next/navigation";
+import { BrandMark } from "@/components/layout/BrandMark";
+import { Button } from "@/components/ui/Button";
+import { Icon, type IconName } from "@/components/ui/Icon";
+import { useRole } from "@/store/RoleContext";
+import type { Role } from "@/lib/types";
+import styles from "./page.module.css";
+
+interface AccessCard {
+  role: Role;
+  title: string;
+  cta: string;
+  icon: IconName;
+  body: string;
+}
+
+const CARDS: AccessCard[] = [
   {
-    title: "Fast by default",
-    description:
-      "Server-rendered pages and streaming responses keep the first paint quick, even on slow connections.",
+    role: "user",
+    title: "User",
+    cta: "Enter Workspace",
+    icon: "users",
+    body: "Lorem ipsum dolor sit amet consectetur. Elit purus nam gravida porttitor nibh urna sit ornare a. Proin dolor morbi id ornare aenean non",
   },
   {
-    title: "Built to scale",
-    description:
-      "A typed API layer and a component library that stay predictable as the product grows.",
-  },
-  {
-    title: "Simple to run",
-    description:
-      "One command to develop, one to build, and sensible defaults everywhere in between.",
+    role: "admin",
+    title: "Administrator",
+    cta: "Enter Portal",
+    icon: "user-check",
+    body: "Lorem ipsum dolor sit amet consectetur. Elit purus nam gravida porttitor nibh urna sit ornare a. Proin dolor morbi id ornare aenean non",
   },
 ];
 
-export default function Home() {
-  const [hello, setHello] = useState(null);
-  useEffect(() => {
-    getHello().then((res) => setHello(res))
-  }, []);
+export default function AccessLevelPage() {
+  const router = useRouter();
+  const { setRole } = useRole();
+
+  // Picking a role here is what the rest of the app reads; the design then
+  // sends the visitor through the (UI-only) login screen.
+  function choose(role: Role) {
+    setRole(role);
+    router.push("/login");
+  }
 
   return (
-    <>
-      <header className="w-full border-b border-black/[.08] dark:border-white/[.12]">
-        <nav className="mx-auto flex h-16 w-full max-w-5xl items-center justify-between px-6">
-          <Link href="/" className="text-base font-semibold tracking-tight">
-            Northbound
-          </Link>
-          <div className="flex items-center gap-6 text-sm">
-            <a
-              href="#features"
-              className="hidden text-zinc-600 transition-colors hover:text-foreground sm:block dark:text-zinc-400"
-            >
-              Features
-            </a>
-            <a
-              href="#contact"
-              className="rounded-full bg-foreground px-4 py-2 font-medium text-background transition-opacity hover:opacity-90"
-            >
-              Get started
-            </a>
-          </div>
-        </nav>
+    <div className={styles.page}>
+      <header className={styles.topbar}>
+        <BrandMark size="sm" />
       </header>
 
-      <main className="flex-1">
-        <section className="mx-auto w-full max-w-5xl px-6 py-24 sm:py-32">
-          <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
-            Now in early access
+      <main className={styles.main}>
+        <div className={styles.intro}>
+          <h1 className={styles.title}>Select Access Level</h1>
+          <p className={styles.subtitle}>
+            Lorem ipsum dolor sit amet consectetur. Elit purus nam.
           </p>
-          <h1 className="mt-4 max-w-2xl text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
-            Ship your product without the busywork.
-          </h1>
-          <p className="mt-6 max-w-xl text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Northbound gives your team a single place to plan, build, and
-            release — so you spend your time on the work that actually moves the
-            product forward. {hello}
-          </p>
-          <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-            <a
-              href="#contact"
-              className="flex h-12 items-center justify-center rounded-full bg-foreground px-6 text-base font-medium text-background transition-opacity hover:opacity-90"
-            >
-              Get started free
-            </a>
-            <a
-              href="#features"
-              className="flex h-12 items-center justify-center rounded-full border border-black/[.08] px-6 text-base font-medium transition-colors hover:bg-black/[.04] dark:border-white/[.14] dark:hover:bg-white/[.06]"
-            >
-              See how it works
-            </a>
-          </div>
-        </section>
-
-        <section
-          id="features"
-          className="border-t border-black/[.08] dark:border-white/[.12]"
-        >
-          <div className="mx-auto grid w-full max-w-5xl gap-10 px-6 py-20 sm:grid-cols-3">
-            {features.map((feature) => (
-              <div key={feature.title}>
-                <h2 className="text-base font-semibold tracking-tight">
-                  {feature.title}
-                </h2>
-                <p className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
-                  {feature.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section
-          id="contact"
-          className="border-t border-black/[.08] dark:border-white/[.12]"
-        >
-          <div className="mx-auto w-full max-w-5xl px-6 py-20">
-            <h2 className="text-2xl font-semibold tracking-tight">
-              Want early access?
-            </h2>
-            <p className="mt-3 max-w-lg text-zinc-600 dark:text-zinc-400">
-              Leave your email and we&apos;ll be in touch when your workspace is
-              ready.
-            </p>
-            <form className="mt-8 flex w-full max-w-md flex-col gap-3 sm:flex-row">
-              <label htmlFor="email" className="sr-only">
-                Email address
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                placeholder="you@company.com"
-                className="h-12 flex-1 rounded-full border border-black/[.12] bg-transparent px-5 text-base outline-none placeholder:text-zinc-400 focus:border-foreground dark:border-white/[.18]"
-              />
-              <button
-                type="submit"
-                className="h-12 rounded-full bg-foreground px-6 text-base font-medium text-background transition-opacity hover:opacity-90"
-              >
-                Request access
-              </button>
-            </form>
-          </div>
-        </section>
-      </main>
-
-      <footer className="border-t border-black/[.08] dark:border-white/[.12]">
-        <div className="mx-auto flex w-full max-w-5xl flex-col gap-2 px-6 py-8 text-sm text-zinc-500 sm:flex-row sm:items-center sm:justify-between dark:text-zinc-400">
-          <p>© 2026 Northbound. All rights reserved.</p>
-          <div className="flex gap-6">
-            <a href="#" className="transition-colors hover:text-foreground">
-              Privacy
-            </a>
-            <a href="#" className="transition-colors hover:text-foreground">
-              Terms
-            </a>
-          </div>
         </div>
-      </footer>
-    </>
+
+        <div className={styles.cards}>
+          {CARDS.map((card) => (
+            <section key={card.role} className={styles.card}>
+              <Icon name={card.icon} size={90} strokeWidth={1.25} className={styles.icon} />
+              <h2 className={styles.cardTitle}>{card.title}</h2>
+              <p className={styles.cardBody}>{card.body}</p>
+              <Button fullWidth iconAfter="arrow-right" onClick={() => choose(card.role)}>
+                {card.cta}
+              </Button>
+            </section>
+          ))}
+        </div>
+      </main>
+    </div>
   );
 }

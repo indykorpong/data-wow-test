@@ -1,0 +1,131 @@
+/* Select Access Level — Figma 5:792: a 116px top bar, a centred heading, and
+   two 581×619 role cards separated by a 90px gutter. */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background-color: var(--bg-page);
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  min-height: 116px;
+  padding-inline: clamp(1rem, 4vw, 2.5rem);
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.main {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(2rem, 5vw, 4rem);
+  padding: clamp(2rem, 6vw, 4rem) clamp(1rem, 4vw, 2.5rem);
+}
+
+.intro {
+  max-width: 681px;
+  text-align: center;
+}
+
+.title {
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+  color: var(--text-primary);
+}
+
+.subtitle {
+  margin-top: 1rem;
+  font-size: var(--fs-md);
+  color: var(--text-secondary);
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.5rem, 5vw, 5.625rem);
+  width: 100%;
+  max-width: 1252px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: clamp(1.5rem, 4vw, 6.25rem);
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  transition:
+    transform 200ms var(--ease-out),
+    box-shadow 200ms var(--ease-out);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.icon {
+  color: var(--c-primary-600);
+}
+
+.cardTitle {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-bold);
+  color: var(--text-primary);
+}
+
+.cardBody {
+  flex: 1 1 auto;
+  font-size: var(--fs-sm);
+  line-height: var(--lh-normal);
+  color: var(--text-secondary);
+}
+
+/* --- Responsive ------------------------------------------------------------ */
+
+@media (max-width: 1023px) {
+  .topbar {
+    min-height: 72px;
+  }
+
+  .title {
+    font-size: var(--fs-h2);
+  }
+
+  .cardTitle {
+    font-size: var(--fs-h4);
+  }
+}
+
+/* Two 581px cards cannot sit side by side on a phone. */
+@media (max-width: 639px) {
+  .cards {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .title {
+    font-size: var(--fs-h4);
+  }
+
+  .subtitle {
+    font-size: var(--fs-sm);
+  }
+
+  .card {
+    gap: 1.25rem;
+  }
+
+  /* A hover lift is meaningless on touch and just causes a sticky-hover
+     artefact after a tap. */
+  .card:hover {
+    transform: none;
+    box-shadow: var(--shadow-md);
+  }
+}

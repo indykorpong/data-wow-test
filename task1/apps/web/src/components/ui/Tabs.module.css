@@ -1,0 +1,46 @@
+/* Tab bar — Figma: 256×48 strip, "Overview" 132×48 and "Create" 102×48. */
+
+.tablist {
+  display: inline-flex;
+  gap: 1.375rem;
+  padding: 0;
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding-inline: 1rem;
+  font-size: var(--fs-md);
+  font-weight: var(--fw-medium);
+  color: var(--text-secondary);
+  border-radius: var(--radius-md);
+  transition:
+    background-color 160ms var(--ease-out),
+    color 160ms var(--ease-out);
+}
+
+.tab:hover {
+  color: var(--text-primary);
+  background-color: var(--c-gray-100);
+}
+
+.tab.active {
+  color: var(--c-primary-600);
+  background-color: var(--c-primary-50);
+  font-weight: var(--fw-semibold);
+}
+
+@media (max-width: 639px) {
+  .tablist {
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .tab {
+    flex: 1 1 0;
+    font-size: var(--fs-sm);
+    padding-inline: 0.5rem;
+  }
+}

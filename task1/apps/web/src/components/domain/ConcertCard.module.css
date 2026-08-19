@@ -1,0 +1,103 @@
+/* Concert card — Figma "Frame 12" + "Frame 20": title, rule, description, then
+   a footer row with the seat count on the left and the action on the right. */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2rem;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.title {
+  font-size: var(--fs-h4);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-snug);
+  color: var(--text-primary);
+}
+
+/* The User-home frame sets its titles larger (259×47) than the Admin ones. */
+.card.prominent .title {
+  font-size: var(--fs-h3);
+}
+
+.rule {
+  height: 1px;
+  margin: 0;
+  border: 0;
+  background-color: var(--border-subtle);
+}
+
+.description {
+  font-size: var(--fs-lg);
+  line-height: var(--lh-normal);
+  color: var(--text-secondary);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.seats {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-medium);
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.seats :global(svg) {
+  color: var(--text-secondary);
+}
+
+/* --- Responsive ------------------------------------------------------------ */
+
+@media (max-width: 1023px) {
+  .card {
+    padding: 1.5rem;
+    gap: 1rem;
+  }
+
+  .description {
+    font-size: var(--fs-sm);
+  }
+}
+
+/* Phone: the footer becomes a stack and the action spans the full width, which
+   is both easier to hit and avoids a cramped two-item row. */
+@media (max-width: 639px) {
+  .card {
+    padding: 1.25rem;
+  }
+
+  .title,
+  .card.prominent .title {
+    font-size: var(--fs-md);
+  }
+
+  .footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .seats {
+    font-size: var(--fs-sm);
+  }
+
+  .action {
+    display: flex;
+  }
+
+  .action > * {
+    width: 100%;
+  }
+}

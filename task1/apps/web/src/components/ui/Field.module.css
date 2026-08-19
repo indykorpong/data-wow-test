@@ -1,0 +1,115 @@
+/* Form fields — Figma: 520×48 control, 24px icons inset 12px, label above.
+   Shared by TextField and TextArea so both stay on one visual spec. */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.label {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-snug);
+  color: var(--text-primary);
+}
+
+@media (max-width: 639px) {
+  .field {
+    gap: 0.5rem;
+  }
+
+  .label {
+    font-size: var(--fs-md);
+  }
+}
+
+/* The bordered box. It owns the focus ring so the ring wraps the whole control
+   including its icons, rather than just the bare <input>. */
+.control {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: var(--field-h);
+  padding-inline: 0.75rem;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  transition:
+    border-color 160ms var(--ease-out),
+    box-shadow 160ms var(--ease-out);
+}
+
+.control:focus-within {
+  border-color: var(--c-primary-600);
+  box-shadow: 0 0 0 3px var(--c-primary-50);
+}
+
+.control.invalid {
+  border-color: var(--c-danger-600);
+}
+
+.control.invalid:focus-within {
+  box-shadow: 0 0 0 3px var(--c-danger-50);
+}
+
+/* Multi-line variant: icons would sit oddly centred next to a tall box, so the
+   textarea control aligns to the top and grows. */
+.control.multiline {
+  align-items: flex-start;
+  padding-block: 0.75rem;
+  min-height: 102px; /* Figma: 1040×102 description box */
+}
+
+.icon {
+  flex-shrink: 0;
+  color: var(--text-secondary);
+}
+
+.input {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0;
+  font-size: var(--fs-sm);
+  background: transparent;
+  border: 0;
+}
+
+/* The control already shows a focus ring via :focus-within. */
+.input:focus,
+.input:focus-visible {
+  outline: none;
+}
+
+.input::placeholder {
+  color: var(--text-secondary);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 78px;
+  line-height: var(--lh-normal);
+}
+
+/* Password reveal toggle. It is a real button so it is reachable by keyboard. */
+.toggle {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  transition: color 160ms var(--ease-out);
+}
+
+.toggle:hover {
+  color: var(--text-primary);
+}
+
+.error {
+  font-size: var(--fs-xs);
+  color: var(--c-danger-600);
+}

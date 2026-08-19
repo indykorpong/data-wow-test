@@ -1,0 +1,90 @@
+/* Button — Figma sizes 160×60 (lg) and 179×48 (md). */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  border-radius: var(--radius-md);
+  font-weight: var(--fw-semibold);
+  white-space: nowrap;
+  transition:
+    background-color 160ms var(--ease-out),
+    border-color 160ms var(--ease-out),
+    color 160ms var(--ease-out),
+    transform 120ms var(--ease-out);
+}
+
+.button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* --- Sizes ---------------------------------------------------------------- */
+
+.lg {
+  min-height: var(--btn-h-lg);
+  padding-inline: 1.75rem;
+  font-size: var(--fs-lg);
+}
+
+.md {
+  min-height: var(--btn-h-md);
+  padding-inline: 1.25rem;
+  font-size: var(--fs-sm);
+}
+
+/* The 60px/24px desktop button is oversized on a phone; step it down rather
+   than let it dominate the viewport. */
+@media (max-width: 639px) {
+  .lg {
+    min-height: 52px;
+    padding-inline: 1.25rem;
+    font-size: var(--fs-md);
+  }
+}
+
+/* --- Variants ------------------------------------------------------------- */
+
+.primary {
+  background-color: var(--c-primary-600);
+  color: var(--text-inverse);
+  border: 1px solid var(--c-primary-600);
+}
+
+.primary:hover:not(:disabled) {
+  background-color: var(--c-primary-500);
+  border-color: var(--c-primary-500);
+}
+
+.danger {
+  background-color: var(--c-danger-600);
+  color: var(--text-inverse);
+  border: 1px solid var(--c-danger-600);
+}
+
+.danger:hover:not(:disabled) {
+  background-color: var(--c-danger-500);
+  border-color: var(--c-danger-500);
+}
+
+.ghost {
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-strong);
+}
+
+.ghost:hover:not(:disabled) {
+  background-color: var(--c-gray-50);
+  border-color: var(--c-gray-500);
+}
+
+/* --- Modifiers ------------------------------------------------------------ */
+
+.fullWidth {
+  width: 100%;
+}

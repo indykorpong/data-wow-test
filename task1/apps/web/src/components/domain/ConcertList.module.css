@@ -1,0 +1,17 @@
+/* Vertical stack of concert cards, shared by Admin Overview and User Home. */
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 2vw, 1.5rem);
+}
+
+.empty {
+  padding: 3rem 1.5rem;
+  text-align: center;
+  font-size: var(--fs-sm);
+  color: var(--text-secondary);
+  background-color: var(--bg-surface);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+}

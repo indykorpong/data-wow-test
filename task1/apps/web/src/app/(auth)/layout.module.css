@@ -1,0 +1,67 @@
+/* Auth shell — Figma 4:106 / 21:106: a 720 | 720 split, brand panel on the
+   left, form on the right. */
+
+.split {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-height: 100dvh;
+}
+
+/* --- Brand panel ---------------------------------------------------------- */
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 3rem;
+  padding: clamp(2rem, 5vw, 6.875rem);
+  background-color: var(--bg-sidebar);
+  color: var(--text-inverse);
+}
+
+.quote {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-snug);
+}
+
+.blurb {
+  margin-top: 2rem;
+  font-size: var(--fs-sm);
+  line-height: var(--lh-normal);
+  color: rgb(255 255 255 / 0.7);
+}
+
+/* --- Form panel ----------------------------------------------------------- */
+
+.formPane {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(2rem, 5vw, 4rem) clamp(1rem, 4vw, 6.25rem);
+  background-color: var(--bg-surface);
+}
+
+.formInner {
+  width: 100%;
+  max-width: 520px; /* Figma form column */
+}
+
+/* --- Responsive -----------------------------------------------------------
+   Below the desktop breakpoint the two 720px halves cannot coexist. The brand
+   panel is decorative, so it collapses to a slim header strip and the form
+   takes the full width rather than being squeezed. */
+@media (max-width: 1023px) {
+  .split {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+  }
+
+  .panel {
+    padding: 1.5rem clamp(1rem, 4vw, 2.5rem);
+  }
+
+  .quoteBlock {
+    display: none;
+  }
+}
