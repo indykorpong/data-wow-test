@@ -12,6 +12,11 @@ enum Role {
   USER
 }
 
+enum ReservationAction {
+  RESERVE
+  CANCEL
+}
+
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
@@ -21,5 +26,53 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  reservations    Reservation[]
+  reservationLogs ReservationLog[]
+
   @@map("users")
+}
+
+model Concert {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  totalSeats  Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  reservations Reservation[]
+  logs         ReservationLog[]
+
+  @@map("concerts")
+}
+
+model Reservation {
+  id        String   @id @default(uuid())
+  userId    String
+  concertId String
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id])
+  concert Concert @relation(fields: [concertId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, concertId])
+  @@index([concertId])
+  @@map("reservations")
+}
+
+model ReservationLog {
+  id          String            @id @default(uuid())
+  userId      String
+  username    String
+  concertId   String?
+  concertName String
+  action      ReservationAction
+  createdAt   DateTime          @default(now())
+
+  user    User     @relation(fields: [userId], references: [id])
+  concert Concert? @relation(fields: [concertId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([concertId])
+  @@map("reservation_logs")
 }

@@ -5,6 +5,7 @@ import type { FormEvent } from "react";
 import { Button } from "@/components/ui/Button";
 import { TextArea } from "@/components/ui/TextArea";
 import { TextField } from "@/components/ui/TextField";
+import { ApiError } from "@/lib/api";
 import { useConcerts } from "@/store/ConcertsContext";
 import { useToast } from "@/store/ToastContext";
 import styles from "./ConcertForm.module.css";
@@ -22,6 +23,7 @@ export function ConcertForm() {
   const [name, setName] = useState("");
   const [totalSeats, setTotalSeats] = useState("");
   const [description, setDescription] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
 
   // Drop a field's message as soon as the user edits it — leaving "is required"
@@ -52,24 +54,31 @@ export function ConcertForm() {
     return next;
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const found = validate();
     setErrors(found);
     if (Object.keys(found).length > 0) return;
 
-    createConcert({
-      name: name.trim(),
-      description: description.trim(),
-      totalSeats: Number(totalSeats),
-    });
+    setSubmitting(true);
+    try {
+      await createConcert({
+        name: name.trim(),
+        description: description.trim(),
+        totalSeats: Number(totalSeats),
+      });
 
-    showToast("Create successfully");
+      showToast("Create successfully");
 
-    setName("");
-    setTotalSeats("");
-    setDescription("");
+      setName("");
+      setTotalSeats("");
+      setDescription("");
+    } catch (error) {
+      showToast(error instanceof ApiError ? error.message : "Something went wrong.", "error");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -123,8 +132,8 @@ export function ConcertForm() {
       </div>
 
       <div className={styles.actions}>
-        <Button type="submit" iconBefore="save">
-          Save
+        <Button type="submit" iconBefore="save" disabled={submitting}>
+          {submitting ? "Saving…" : "Save"}
         </Button>
       </div>
     </form>

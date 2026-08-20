@@ -1,22 +1,32 @@
 "use client";
 
+import { useState } from "react";
 import { ConcertCard } from "@/components/domain/ConcertCard";
 import { Button } from "@/components/ui/Button";
+import { ApiError } from "@/lib/api";
 import { useConcerts } from "@/store/ConcertsContext";
 import { useToast } from "@/store/ToastContext";
 import styles from "@/components/domain/ConcertList.module.css";
 
 export default function UserHomePage() {
-  const { state, isReserved, reserve, cancel } = useConcerts();
+  const { state, reserve, cancel } = useConcerts();
   const { showToast } = useToast();
+  const [pendingId, setPendingId] = useState<string | null>(null);
 
-  function toggle(concertId: string, concertName: string) {
-    if (isReserved(concertId)) {
-      cancel(concertId);
-      showToast(`Cancelled your seat for ${concertName}`);
-    } else {
-      reserve(concertId);
-      showToast(`Reserved a seat for ${concertName}`);
+  async function toggle(concertId: string, concertName: string, isMine: boolean) {
+    setPendingId(concertId);
+    try {
+      if (isMine) {
+        await cancel(concertId);
+        showToast(`Cancelled your seat for ${concertName}`);
+      } else {
+        await reserve(concertId);
+        showToast(`Reserved a seat for ${concertName}`);
+      }
+    } catch (error) {
+      showToast(error instanceof ApiError ? error.message : "Something went wrong.", "error");
+    } finally {
+      setPendingId(null);
     }
   }
 
@@ -25,11 +35,15 @@ export default function UserHomePage() {
       <h1 className="u-sr-only">Concerts</h1>
 
       {state.concerts.length === 0 ? (
-        <p className={styles.empty}>No concerts are available right now.</p>
+        <p className={styles.empty}>
+          {state.loading ? "Loading concerts…" : "No concerts are available right now."}
+        </p>
       ) : (
         <div className={styles.list}>
           {state.concerts.map((concert) => {
-            const reserved = isReserved(concert.id);
+            const isMine = concert.isReservedByMe;
+            const isFull = concert.reservedSeats >= concert.totalSeats;
+            const label = isMine ? "Cancel" : isFull ? "Fully booked" : "Reserve";
             return (
               <ConcertCard
                 key={concert.id}
@@ -37,10 +51,11 @@ export default function UserHomePage() {
                 prominent
                 action={
                   <Button
-                    variant={reserved ? "danger" : "primary"}
-                    onClick={() => toggle(concert.id, concert.name)}
+                    variant={isMine ? "danger" : "primary"}
+                    disabled={(!isMine && isFull) || pendingId === concert.id}
+                    onClick={() => toggle(concert.id, concert.name, isMine)}
                   >
-                    {reserved ? "Cancel" : "Reserve"}
+                    {label}
                   </Button>
                 }
               />

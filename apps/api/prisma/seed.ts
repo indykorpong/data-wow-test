@@ -1,5 +1,5 @@
 import { PrismaClient, Role } from '@prisma/client';
-import * as bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
@@ -9,14 +9,16 @@ async function main() {
   const fullName = process.env.ADMIN_FULL_NAME ?? 'System Admin';
 
   if (!email || !password) {
-    throw new Error('ADMIN_EMAIL and ADMIN_PASSWORD must be set to seed the admin user');
+    throw new Error(
+      'ADMIN_EMAIL and ADMIN_PASSWORD must be set to seed the admin user',
+    );
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
   await prisma.user.upsert({
     where: { email },
-    update: { role: Role.ADMIN },
+    update: { role: Role.ADMIN, password: hashedPassword },
     create: { email, password: hashedPassword, fullName, role: Role.ADMIN },
   });
 

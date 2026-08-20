@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { workspaceFromPath } from "@/lib/workspace";
-import { useRole } from "@/store/RoleContext";
+import { useAuth } from "@/store/AuthContext";
 import styles from "./Sidebar.module.css";
 
 interface SidebarProps {
@@ -22,31 +22,23 @@ interface NavLink {
 export function Sidebar({ onNavigate }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const { setRole } = useRole();
+  const { logout } = useAuth();
 
-  // Derived from the route, not from RoleContext — see lib/workspace.ts.
+  // Derived from the route — see lib/workspace.ts.
   const isAdmin = workspaceFromPath(pathname) === "admin";
 
-  // Admin gets Home + History; the user side has no History screen in the
-  // design, so it gets Home only.
   const links: NavLink[] = isAdmin
     ? [
         { kind: "link", href: "/admin", label: "Home", icon: "home" },
         { kind: "link", href: "/admin/history", label: "History", icon: "inbox" },
       ]
-    : [{ kind: "link", href: "/user", label: "Home", icon: "home" }];
-
-  const handleSwitchRole = () => {
-    const next = isAdmin ? "user" : "admin";
-    setRole(next);
-    router.push(next === "admin" ? "/admin" : "/user");
-    onNavigate?.();
-  };
+    : [
+        { kind: "link", href: "/user", label: "Home", icon: "home" },
+        { kind: "link", href: "/user/history", label: "History", icon: "inbox" },
+      ];
 
   const handleLogout = () => {
-    // No real session to clear this task — reset to the default role and send
-    // the visitor back to the access-level screen.
-    setRole("admin");
+    logout();
     router.push("/");
     onNavigate?.();
   };
@@ -78,13 +70,6 @@ export function Sidebar({ onNavigate }: SidebarProps) {
               </li>
             );
           })}
-
-          <li>
-            <button type="button" className={styles.item} onClick={handleSwitchRole}>
-              <Icon name="refresh-ccw" size={24} />
-              <span>{isAdmin ? "Switch to user" : "Switch to Admin"}</span>
-            </button>
-          </li>
         </ul>
       </nav>
 

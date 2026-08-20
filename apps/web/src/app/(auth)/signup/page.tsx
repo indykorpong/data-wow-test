@@ -3,10 +3,10 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { ApiError } from "@/lib/api";
 import { Button } from "@/components/ui/Button";
 import { TextField } from "@/components/ui/TextField";
-import { useRole } from "@/store/RoleContext";
+import { useAuth } from "@/store/AuthContext";
 import styles from "../auth.module.css";
 
 interface Errors {
@@ -14,16 +14,17 @@ interface Errors {
   email?: string;
   password?: string;
   confirmPassword?: string;
+  form?: string;
 }
 
 export default function SignUpPage() {
-  const router = useRouter();
-  const { role } = useRole();
+  const { register } = useAuth();
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
 
   // Clear a field's message as soon as it is edited.
@@ -31,7 +32,7 @@ export default function SignUpPage() {
     setErrors((previous) => (previous[key] ? { ...previous, [key]: undefined } : previous));
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const found: Errors = {};
@@ -45,7 +46,17 @@ export default function SignUpPage() {
     setErrors(found);
     if (Object.keys(found).length > 0) return;
 
-    router.push(role === "admin" ? "/admin" : "/user");
+    setSubmitting(true);
+    try {
+      // The redirect to /admin or /user happens in (app)/layout.tsx once the
+      // authenticated user lands in AuthContext.
+      await register(fullName.trim(), email, password);
+    } catch (error) {
+      setErrors({
+        form: error instanceof ApiError ? error.message : "Something went wrong. Please try again.",
+      });
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -111,8 +122,10 @@ export default function SignUpPage() {
         />
       </div>
 
-      <Button type="submit" fullWidth>
-        Create an account
+      {errors.form ? <p className={styles.formError} role="alert">{errors.form}</p> : null}
+
+      <Button type="submit" fullWidth disabled={submitting}>
+        {submitting ? "Creating account…" : "Create an account"}
       </Button>
 
       <p className={styles.footnote}>

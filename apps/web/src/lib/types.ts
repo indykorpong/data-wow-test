@@ -1,11 +1,25 @@
 /** Which side of the product the visitor is currently using. */
 export type Role = "admin" | "user";
 
+/** The role literal as returned by the API. */
+export type ApiRole = "ADMIN" | "USER";
+
+export interface AuthUser {
+  id: string;
+  email: string;
+  fullName: string;
+  role: ApiRole;
+}
+
 export interface Concert {
   id: string;
   name: string;
   description: string;
   totalSeats: number;
+  /** Count of currently active reservations, computed server-side. */
+  reservedSeats: number;
+  /** Whether the signed-in user holds a seat for this concert. Always false for admins. */
+  isReservedByMe: boolean;
 }
 
 /** What a history row records. Mirrors the three-column table in the design. */
@@ -22,9 +36,8 @@ export interface HistoryEntry {
 
 export interface ConcertsState {
   concerts: Concert[];
-  /** Concert ids the current user holds a seat for. */
-  reservedConcertIds: string[];
   history: HistoryEntry[];
+  loading: boolean;
 }
 
 /** Derived values behind the three stat cards. Never stored — always computed. */

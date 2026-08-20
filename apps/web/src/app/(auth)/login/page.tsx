@@ -3,19 +3,19 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { ApiError } from "@/lib/api";
 import { Button } from "@/components/ui/Button";
 import { TextField } from "@/components/ui/TextField";
-import { useRole } from "@/store/RoleContext";
+import { useAuth } from "@/store/AuthContext";
 import styles from "../auth.module.css";
 
 export default function LoginPage() {
-  const router = useRouter();
-  const { role } = useRole();
+  const { login } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  type Errors = { email?: string; password?: string };
+  const [submitting, setSubmitting] = useState(false);
+  type Errors = { email?: string; password?: string; form?: string };
   const [errors, setErrors] = useState<Errors>({});
 
   // Clear a field's message as soon as it is edited.
@@ -23,11 +23,9 @@ export default function LoginPage() {
     setErrors((previous) => (previous[key] ? { ...previous, [key]: undefined } : previous));
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    // There is no auth this task — these checks exist so the form behaves like a
-    // form, not because any credential is verified.
     const found: Errors = {};
     if (!email.trim()) found.email = "Email is required.";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) found.email = "Enter a valid email address.";
@@ -36,7 +34,17 @@ export default function LoginPage() {
     setErrors(found);
     if (Object.keys(found).length > 0) return;
 
-    router.push(role === "admin" ? "/admin" : "/user");
+    setSubmitting(true);
+    try {
+      // The redirect to /admin or /user happens in (app)/layout.tsx once the
+      // authenticated user (and their real role) lands in AuthContext.
+      await login(email, password);
+    } catch (error) {
+      setErrors({
+        form: error instanceof ApiError ? error.message : "Something went wrong. Please try again.",
+      });
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -74,8 +82,10 @@ export default function LoginPage() {
         />
       </div>
 
-      <Button type="submit" fullWidth>
-        {role === "admin" ? "Login as Administrator" : "Login as User"}
+      {errors.form ? <p className={styles.formError} role="alert">{errors.form}</p> : null}
+
+      <Button type="submit" fullWidth disabled={submitting}>
+        {submitting ? "Signing in…" : "Login"}
       </Button>
 
       <p className={styles.footnote}>

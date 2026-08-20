@@ -7,7 +7,9 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { RolesGuard } from './auth/guards/roles.guard';
+import { ConcertsModule } from './concerts/concerts.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { ReservationsModule } from './reservations/reservations.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -17,6 +19,8 @@ import { UsersModule } from './users/users.module';
     UsersModule,
     AuthModule,
     AdminModule,
+    ConcertsModule,
+    ReservationsModule,
   ],
   controllers: [AppController],
   providers: [

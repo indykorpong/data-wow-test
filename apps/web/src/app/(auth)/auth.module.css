@@ -20,6 +20,12 @@
   gap: 2.25rem; /* Figma: 136px pitch between 100px field groups */
 }
 
+.formError {
+  font-size: var(--fs-sm);
+  text-align: center;
+  color: var(--c-danger-600);
+}
+
 .footnote {
   font-size: var(--fs-lg);
   text-align: center;
