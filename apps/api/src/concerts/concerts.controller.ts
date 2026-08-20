@@ -5,6 +5,7 @@ import {
   Get,
   HttpCode,
   Param,
+  ParseUUIDPipe,
   Post,
 } from '@nestjs/common';
 import { Role } from '@prisma/client';
@@ -32,7 +33,7 @@ export class ConcertsController {
   @Roles(Role.ADMIN)
   @HttpCode(204)
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.concertsService.remove(id);
   }
 }

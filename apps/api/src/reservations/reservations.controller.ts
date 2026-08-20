@@ -5,6 +5,7 @@ import {
   Get,
   HttpCode,
   Param,
+  ParseUUIDPipe,
   Post,
 } from '@nestjs/common';
 import { Role } from '@prisma/client';
@@ -32,7 +33,7 @@ export class ReservationsController {
   @Delete(':concertId')
   cancel(
     @CurrentUser() user: AuthenticatedUser,
-    @Param('concertId') concertId: string,
+    @Param('concertId', ParseUUIDPipe) concertId: string,
   ) {
     return this.reservationsService.cancel(user, concertId);
   }
