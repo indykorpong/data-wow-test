@@ -80,3 +80,22 @@ pnpm --filter web test:watch
 ```
 
 Only `api test:e2e` requires the database; all other test commands run standalone.
+
+## Bonus Tasks (Theory & Strategy)
+
+1. Performance Optimization: How would you optimize the website if the dataset becomes massive and high traffic starts slowing down the site? (e.g., Caching, Indexing, CDN).
+
+- I would create Database Index on the tables which might be heavily queried, e.g. create index for `userId` column on `reservation_logs` table to speed up GET `/reservations/me` api endpoint. Also the caching strategy would be useful in GET requests so that the api doesn't have to access database all the time, which is slower than accessing the Redis. Or we can even scale up the api servers by increasing the amount of pods and manage them with Kubernetes.
+
+2. Concurrency Control: How do you handle the "Race Condition" where 1,000 users try to reserve the last 10 available seats at the exact same millisecond? Explain your strategy to ensure no over-booking occurs (e.g., Database Transactions, Pessimistic/Optimistic Locking, or Message Queues).
+
+- Atomic conditional update
+Skip "count rows then decide" entirely. Maintain an availableSeats counter and do the check-and-decrement as one atomic SQL statement:
+```
+UPDATE concerts SET available_seats = available_seats - 1
+WHERE id = $1 AND available_seats > 0
+RETURNING available_seats;
+```
+- Postgres guarantees this UPDATE is atomic per-row — concurrent transactions serialize automatically at the row level, no explicit lock needed, no retry storms. If 0 rows come back, the concert is sold out → reject. This is simpler and more scalable than SELECT FOR UPDATE because you never hold a lock across a round trip — it's a single statement.
+
+- This would mean changing your schema from "count reservation rows" to "maintain a counter," or doing both (counter for capacity, rows for who-reserved-what).
